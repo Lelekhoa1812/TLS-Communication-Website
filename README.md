@@ -82,6 +82,6 @@ python3 server.py fullchain_host1.crt host1.key rootCA.crt
 ```
 
 
-Once deploy your server and localhost port, access the website via
-http://localhost:8080/user1.html
+Once deploy your server and localhost port, access the website via  
+http://localhost:8080/user1.html  
 http://localhost:8080/user2.html
