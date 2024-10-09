@@ -1,0 +1,21 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+default_days = 365
+default_md = sha256
+
+[ req ]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_end_user
+
+[ req_distinguished_name ]
+C = AU
+ST = State
+O = Organization
+CN = Host
+
+[ v3_end_user ]
+basicConstraints = critical, CA:FALSE
+keyUsage = digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth, clientAuth

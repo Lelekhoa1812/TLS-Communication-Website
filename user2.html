@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User 2 - Secure WebSocket</title>
+    <style>
+        body {
+            background-color: rgb(54, 0, 51);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .message-box {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid white;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .message-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .message-form input {
+            height: 200px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>User 2 Secure Chat</h1>
+
+    <div class="message-box" id="receivedMessages"></div>
+
+    <form class="message-form" id="messageForm">
+        <input type="text" id="messageInput" placeholder="Type your message..." required>
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+    const ws = new WebSocket('wss://127.0.0.1:5050');
+    const receivedMessages = document.getElementById('receivedMessages');
+    const messageForm = document.getElementById('messageForm');
+    const messageInput = document.getElementById('messageInput');
+
+    ws.onopen = () => {
+        console.log('WebSocket connection established.');
+    };
+
+    ws.onerror = (error) => {
+        console.error('WebSocket Error:', error);
+    };
+
+    ws.onclose = () => {
+        console.log('WebSocket connection closed.');
+    };
+
+    ws.onmessage = (event) => {
+        const messageData = JSON.parse(event.data);
+        receivedMessages.innerHTML += `<p>${messageData.from_user}: ${messageData.message}</p>`;
+        receivedMessages.scrollTop = receivedMessages.scrollHeight;
+    };
+
+    messageForm.onsubmit = (event) => {
+        event.preventDefault();
+
+        // Check if WebSocket connection is open before sending the message
+        if (ws.readyState === WebSocket.OPEN) {
+            const message = messageInput.value;
+            ws.send(JSON.stringify({ from_user: 'User 1', message }));
+            messageInput.value = '';
+        } else {
+            console.error('WebSocket connection is not open. Current state:', ws.readyState);
+            alert('WebSocket connection is not open. Please try again later.');
+        }
+    };
+    </script>
+</body>
+</html>
